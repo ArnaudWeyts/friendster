@@ -1,0 +1,48 @@
+# import Post, PostSubscriptionPayload, PostOrderByInput, Like, LikeSubscriptionPayload from "./generated/prisma.graphql"
+
+type Query {
+  info: String!
+  user(id: ID!): User
+  feed(filter: String, skip: Int, first: Int, orderBy: PostOrderByInput): Feed!
+  feedForUser(
+    filter: String
+    skip: Int
+    first: Int
+    orderBy: PostOrderByInput
+    userId: ID!
+  ): Feed!
+}
+
+type Mutation {
+  signup(user_name: String!, email: String!, password: String!): AuthPayload
+  login(email: String!, password: String!): AuthPayload
+  createPost(body: String!): Post!
+  deletePost(id: ID!): Post!
+  like(postId: ID!): Like!
+  follow(id: ID!): User!
+  unfollow(id: ID!): User!
+}
+
+type Subscription {
+  newPost: PostSubscriptionPayload
+  newLike: LikeSubscriptionPayload
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}
+
+type User {
+  id: ID!
+  user_name: String!
+  email: String!
+  followers: [User]!
+  following: [User]!
+  posts: [Post]!
+}
+
+type Feed {
+  posts: [Post]!
+  count: Int!
+}
